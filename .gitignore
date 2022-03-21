@@ -1,0 +1,4 @@
+.vscode/
+debug/
+build/
+chip8.exe
