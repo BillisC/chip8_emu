@@ -61,13 +61,13 @@ void Chip8Debugger::opcodeAnalyser(const uint16_t &full_opcode, const uint16_t &
 
 // File Output
 void Chip8Debugger::memoryDUMP(){
-    std::fstream salta_kai_gamhsou;
-    salta_kai_gamhsou.open("debug/memory_dump.bin", std::ios::out | std::ios::binary);
-    if(salta_kai_gamhsou){
+    std::fstream dump;
+    dump.open("debug/memory_dump.bin", std::ios::out | std::ios::binary);
+    if(dump){
         for(unsigned int i = 0; i < 4096; ++i){
-            salta_kai_gamhsou.write(reinterpret_cast<char *>(&C8S->memory[i]), 1);
+            dump.write(reinterpret_cast<char *>(&C8S->memory[i]), 1);
         }
-        salta_kai_gamhsou.close();
+        dump.close();
     }
     else{
         printf("I/O ERROR: Memory dump file issue");
@@ -75,13 +75,13 @@ void Chip8Debugger::memoryDUMP(){
 }
 
 void Chip8Debugger::graphicsMemoryDUMP(){
-    std::fstream salta_kai_gamhsou;
-    salta_kai_gamhsou.open("debug/graphics_memory_dump.bin", std::ios::out | std::ios::binary);
-    if(salta_kai_gamhsou){
+    std::fstream dump;
+    dump.open("debug/graphics_memory_dump.bin", std::ios::out | std::ios::binary);
+    if(dump){
         for(unsigned int i = 0; i < 2048; ++i){
-            salta_kai_gamhsou.write(reinterpret_cast<char *>(&C8S->gfx[i]), 1);
+            dump.write(reinterpret_cast<char *>(&C8S->gfx[i]), 1);
         }
-        salta_kai_gamhsou.close();
+        dump.close();
     }
     else{
         printf("I/O ERROR: Graphics memory dump file issue");
