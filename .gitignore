@@ -1,5 +1,4 @@
 .vscode/
-debug/graphics_memory_dump.bin
-debug/memory_dump.bin
-build/*
+debug/
+build/
 chip8.*
