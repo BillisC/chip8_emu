@@ -1,30 +1,32 @@
 all: exec
 
-LINKER_LIBS := -lSDL2main -lSDL2
-OBJECTFILES := build/chip8.o build/chip8Handler.o build/chip8DBG.o build/Graphics/GraphicsCore.o
+TARGET := chip8
+LFLAGS := -lSDL2main -lSDL2
+CFLAGS := -O2
+OBJECTFILES := build/chip8.o build/handler.o build/debugger.o build/window.o
 
 exec: linker
-	@./chip8.exe
+	@./${TARGET} roms/bc_test.ch8
 
-linker: src/chip8.o src/chip8Handler.o src/chip8DBG.o src/Graphics/GraphicsCore.o
+linker: ${OBJECTFILES}
 	@echo "Linking objects.."
-	@g++ -o chip8.exe ${OBJECTFILES} ${LINKER_LIBS}
+	@g++ -o ${TARGET} ${OBJECTFILES} ${LFLAGS}
 
-src/chip8.o: src/chip8.cpp
+build/chip8.o: src/chip8.cpp
 	@echo "Compiling main.."
-	@g++ -c src/chip8.cpp -o build/chip8.o
+	@g++ ${CFLAGS} -c src/chip8.cpp -o build/chip8.o
 
-src/chip8Handler.o: src/chip8Handler.cpp
+build/handler.o: src/handler.cpp
 	@echo "Compiling handler.."
-	@g++ -c src/chip8Handler.cpp -o build/chip8Handler.o
+	@g++ ${CFLAGS} -c src/handler.cpp -o build/handler.o
 
-src/chip8DBG.o: src/chip8DBG.cpp
+build/debugger.o: src/debugger.cpp
 	@echo "Compiling debugger.."
-	@g++ -c src/chip8DBG.cpp -o build/chip8DBG.o
+	@g++ ${CFLAGS} -c src/debugger.cpp -o build/debugger.o
 
-src/Graphics/GraphicsCore.o: src/Graphics/GraphicsCore.cpp 
-	@echo "Compiling gfx core.."
-	@g++ -c src/Graphics/GraphicsCore.cpp -o build/Graphics/GraphicsCore.o
+build/window.o: src/window.cpp 
+	@echo "Compiling window core.."
+	@g++ ${CFLAGS} -c src/window.cpp -o build/window.o
 
 clean:
 	@rm -r build/*

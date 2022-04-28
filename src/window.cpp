@@ -1,6 +1,6 @@
-#include "../../include/Graphics/GraphicsCore.h"
+#include "../include/window.h"
 
-GraphicsHandler::GraphicsHandler(const unsigned int WIDTH, const unsigned int HEIGHT): SCR_WIDTH(WIDTH), SCR_HEIGHT(HEIGHT){
+WindowHandler::WindowHandler(const unsigned int WIDTH, const unsigned int HEIGHT): SCR_WIDTH(WIDTH), SCR_HEIGHT(HEIGHT){
     memset(scr_buffer, 0, 64 * 32);
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -11,22 +11,28 @@ GraphicsHandler::GraphicsHandler(const unsigned int WIDTH, const unsigned int HE
         window = SDL_CreateWindow("segs", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCR_WIDTH, SCR_HEIGHT, SDL_WINDOW_SHOWN);
         if(window == nullptr){
             printf("SDL WINDOW FAILURE: %s\n", SDL_GetError());
+            FAILURE = true;
         }
         else{
             renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-            if(renderer == NULL){
+            if(renderer == nullptr){
                 printf("SDL RENDERER FAILURE: %s\n", SDL_GetError());
+                FAILURE = true;
             }
             else{
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
                 SDL_RenderSetLogicalSize(renderer, SCR_WIDTH, SCR_HEIGHT);
                 texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 64, 32);
+                if(texture == nullptr){
+                    printf("SDL TEXTURE FAILURE: %s\n", SDL_GetError());
+                    FAILURE = true;
+                }
             }
         }
     }
 }
 
-GraphicsHandler::~GraphicsHandler(){
+WindowHandler::~WindowHandler(){
     SDL_DestroyTexture(texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -35,7 +41,7 @@ GraphicsHandler::~GraphicsHandler(){
     SDL_Quit();
 }
 
-void GraphicsHandler::updateGFXBuffer(uint8_t *gfx){
+void WindowHandler::updateGFXBuffer(uint8_t *gfx){
     for (int i = 0; i < 2048; ++i){
         scr_buffer[i] = (0x00FFFFFF * gfx[i]) | 0xFF000000;
     }
@@ -46,9 +52,7 @@ void GraphicsHandler::updateGFXBuffer(uint8_t *gfx){
     SDL_RenderPresent(renderer);
 }
 
-int GraphicsHandler::EventCheck(uint8_t *keypresses){
-    SDL_Event ev;
-
+int WindowHandler::EventCheck(uint8_t *keypresses){
     while(SDL_PollEvent(&ev) != 0){
         //User requests quit
         if(ev.type == SDL_QUIT){

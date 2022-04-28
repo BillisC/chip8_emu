@@ -14,6 +14,7 @@ struct Chip8System{
     uint16_t PC;
 
     // Timers
+    unsigned int clock_speed;
     unsigned int delay_timer;
     unsigned int sound_timer;
 

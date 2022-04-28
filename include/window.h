@@ -1,26 +1,28 @@
-#ifndef GRAPHICSCORE_H
-#define GRAPHICSCORE_H
+#ifndef WINDOWCORE_H
+#define WINDOWCORE_H
 
 #include <SDL2/SDL.h>
 
-class GraphicsHandler{
+class WindowHandler{
     unsigned int SCR_WIDTH, SCR_HEIGHT;
-    
+    bool FAILURE{false};
+
     uint32_t scr_buffer[64 * 32];
 
     SDL_Window *window{nullptr};
     SDL_Renderer *renderer{nullptr};
     SDL_Texture *texture{nullptr};
-    
-    bool FAILURE{false};
+    SDL_Event ev;
 
 public:
-    GraphicsHandler(const unsigned int SCR_WIDTH, const unsigned int SCR_HEIGHT);
-    ~GraphicsHandler();
+    WindowHandler(const unsigned int SCR_WIDTH, const unsigned int SCR_HEIGHT);
+    ~WindowHandler();
 
     void updateGFXBuffer(uint8_t *gfx);
 
     int EventCheck(uint8_t *keypresses);
+
+    bool failCheck(){ return FAILURE; }
 };
 
 #endif
