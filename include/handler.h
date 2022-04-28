@@ -1,7 +1,7 @@
 #ifndef CHIP8HANDLER_H
 #define CHIP8HANDLER_H
 
-#include <cstring>
+#include <cstring> /* Just for memset */
 #include <fstream>
 #include <array>
 
@@ -17,18 +17,24 @@ public:
     uint16_t full_opcode{0x0};
     bool drawMode{false}; // Block drawing
 
-    /* _SysInit_ */ int romLoader(const std::string file_name);
-    /* Emulation */ void clock();
+    // Emulation
+    void clock();
 
-private:
-    /* _SysInit_ */ void init();
-    /* _SysInit_ */ void fontLoader();
+    // _SysInit_
+    int romLoader(const std::string file_name);
     
-    /* Emulation */ void graphics(uint8_t X, uint8_t Y, uint8_t height);
-    /* Emulation */ void timing();
+private:
+    // _SysInit_
+    void init();
+    void fontLoader();
 
-    /* Resetting */ void resetGraphicsMemory();
-    /* Resetting */ void resetMemory();
+    // Emulation
+    void graphics(uint8_t X, uint8_t Y, uint8_t height);
+    void timing();
+
+    // Resetting
+    void resetGraphicsMemory();
+    void resetMemory();
 
 private:
     /* System calls from 0x0NNN have been deprecated except from the display ones */  
